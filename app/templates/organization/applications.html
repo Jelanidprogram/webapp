@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Review Applications - Internship Platform{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-panel">
+    <a class="auth-back" href="{{ url_for('index_view') }}">← Home</a>
+    <div class="brand-wordmark">Internship Platform</div>
+    <p class="auth-tagline">Review applications and match placements</p>
+
+    {% for message in get_flashed_messages(request) %}
+    <div class="alert alert-{{ message.type }} mb-3" role="alert">{{ message.message }}</div>
+    {% endfor %}
+
+    {% if applications %}
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Application</th>
+            <th>Student</th>
+            <th>Posting</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for app in applications %}
+          <tr>
+            <td>#{{ app.application.application_id }}</td>
+            <td>
+              {% if app.profile %}
+                {{ app.profile.FullName }}
+              {% elif app.student %}
+                {{ app.student.email }}
+              {% else %}
+                Unknown student
+              {% endif %}
+            </td>
+            <td>{{ app.posting.title if app.posting else '—' }}</td>
+            <td>{{ app.company.name if app.company else '—' }}</td>
+            <td><span class="badge bg-{% if app.application.status == 'matched' %}success{% elif app.application.status == 'rejected' %}danger{% else %}warning{% endif %}">{{ app.application.status }}</span></td>
+            <td>
+              <a
+                href="{{ url_for('organization_application_detail_view', application_id=app.application.application_id) }}"
+                class="btn btn-outline-primary btn-sm"
+              >
+                Review
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info mb-3" role="alert">
+      No applications are available for review right now.
+    </div>
+    {% endif %}
+
+    <div class="d-grid gap-2 mt-3">
+      <a class="btn btn-outline-secondary" href="{{ url_for('index_view') }}">Back to home</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

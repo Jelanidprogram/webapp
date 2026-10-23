@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Internship Platform{% endblock %}
+
+{% block content %}
+<div class="landing">
+  <header class="landing-nav">
+    <a class="brand-wordmark" href="{{ url_for('index_view') }}">Internship Platform</a>
+    <div class="landing-nav-actions">
+      {% if user_logged_in %}
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('student_profile_view') }}">My profile</a>
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('internship_postings_view') }}">Browse postings</a>
+      {% if user and user.role == "admin" %}
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('organization_applications_view') }}">Review applications</a>
+      {% endif %}
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('logout') }}">Sign out</a>
+      {% else %}
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('login_view') }}">Sign in</a>
+      <a class="btn-landing btn-landing-primary" href="{{ url_for('register_view') }}">Get started</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main class="landing-hero">
+    <p class="landing-kicker">Student placements</p>
+    <h1 class="brand-wordmark">Internship Platform</h1>
+    <p class="landing-lead">
+      Prepare and submit internship applications, then follow review and placement decisions from participating organizations.
+    </p>
+    {% if not user_logged_in %}
+    <div class="landing-cta">
+      <a class="btn-landing btn-landing-primary" href="{{ url_for('register_view') }}">Create account</a>
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('login_view') }}">Sign in</a>
+    </div>
+    {% endif %}
+  </main>
+
+  <footer class="landing-foot">
+    Connecting students, organizations, and the department through internship placements.
+  </footer>
+</div>
+{% endblock %}

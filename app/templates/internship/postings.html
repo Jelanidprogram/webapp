@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Browse Internship Postings - Internship Platform{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-panel wide">
+    <a class="auth-back" href="{{ url_for('index_view') }}">← Home</a>
+    <div class="brand-wordmark">Internship Platform</div>
+    <p class="auth-tagline">Browse internship postings and submit an application</p>
+
+    {% for message in get_flashed_messages(request) %}
+    <div class="alert alert-{{ message.type }} mb-3" role="alert">{{ message.message }}</div>
+    {% endfor %}
+
+    {% if postings %}
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Posting</th>
+            <th>Company</th>
+            <th>Department</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for posting in postings %}
+          <tr>
+            <td>{{ posting.title }}</td>
+            <td>{{ posting.company_name or posting.company_id }}</td>
+            <td>{{ posting.department_name or posting.department_id }}</td>
+            <td>
+              <a
+                href="{{ url_for('internship_apply_view', posting_id=posting.posting_id) }}"
+                class="btn btn-primary btn-sm"
+              >
+                Apply
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info mb-3" role="alert">
+      No active internship postings are available right now.
+    </div>
+    {% endif %}
+
+    <div class="d-grid gap-2 mt-3">
+      <a class="btn btn-outline-secondary" href="{{ url_for('student_profile_view') }}">My profile</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

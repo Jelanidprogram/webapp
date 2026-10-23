@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Apply to {{ posting.title }} - Internship Platform{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-panel">
+    <a class="auth-back" href="{{ url_for('internship_postings_view') }}">← Browse postings</a>
+    <div class="brand-wordmark">Internship Platform</div>
+    <p class="auth-tagline">Review and submit application</p>
+
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ posting.title }}</h5>
+        <p class="card-text text-muted small">
+          Company: {{ posting.company_name or posting.company_id }} &nbsp;|&nbsp; Department: {{ posting.department_name or posting.department_id }}
+        </p>
+        {% if posting.description %}
+        <p class="card-text">{{ posting.description }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('internship_application_submit') }}">
+      <input type="hidden" name="posting_id" value="{{ posting.posting_id }}">
+
+      <div class="mb-3">
+        <label class="form-label" for="responses">Prepared responses</label>
+        <textarea class="form-control" id="responses" name="responses" rows="4"
+                  placeholder="Why are you interested in this internship?"></textarea>
+        <div class="form-text">Note: Submitting creates an application record and makes it available
+        for organization review. Saving a draft does not submit.</div>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button class="btn btn-primary btn-lg" type="submit">Submit application</button>
+      </div>
+    </form>
+
+    {% for message in get_flashed_messages(request) %}
+    <div class="alert alert-{{ message.type }} mt-3" role="alert">{{ message.message }}</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

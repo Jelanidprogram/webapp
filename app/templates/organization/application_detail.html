@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Review Application #{{ application.application_id }} - Internship Platform{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-panel">
+    <a class="auth-back" href="{{ url_for('organization_applications_view') }}">← All applications</a>
+    <div class="brand-wordmark">Internship Platform</div>
+    <p class="auth-tagline">Application review &amp; placement matching</p>
+
+    {% for message in get_flashed_messages(request) %}
+    <div class="alert alert-{{ message.type }} mb-3" role="alert">{{ message.message }}</div>
+    {% endfor %}
+
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Application #{{ application.application_id }}</h5>
+        <p class="card-text text-muted small">
+          Student:
+          {% if profile %}{{ profile.FullName }}{% elif student %}{{ student.email }}{% else %}Unknown{% endif %}
+          &nbsp;|&nbsp;
+          Posting: {{ posting.title if posting else '—' }}
+          &nbsp;|&nbsp;
+          Company: {{ company.name if company else '—' }}
+          &nbsp;|&nbsp;
+          Department: {{ department.name if department else '—' }}
+        </p>
+        <p class="card-text text-muted small">
+          Status: <strong>{{ application.status }}</strong>
+          {% if application.submitted_at %}
+          &nbsp;|&nbsp; Submitted: {{ application.submitted_at }}
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Create placement</h5>
+        <p class="card-text text-muted small">
+          Select the hosting company and confirm the match for this application.
+        </p>
+        <form method="POST" action="{{ url_for('organization_placement_create') }}">
+          <input type="hidden" name="application_id" value="{{ application.application_id }}">
+
+          <div class="mb-3">
+            <label class="form-label" for="company_id">Hosting company</label>
+            <select class="form-select" id="company_id" name="company_id" required>
+              {% for company in companies %}
+              <option value="{{ company.company_id }}" {% if company and company.company_id == company.company_id %}selected{% endif %}>
+                {{ company.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="status">Placement status</label>
+            <select class="form-select" id="status" name="status">
+              <option value="matched" {% if status == 'matched' %}selected{% endif %}>Matched</option>
+              <option value="placed" {% if status == 'placed' %}selected{% endif %}>Placed</option>
+              <option value="rejected" {% if status == 'rejected' %}selected{% endif %}>Rejected</option>
+              <option value="under_review" {% if status == 'under_review' %}selected{% endif %}>Under review</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="note">Note (optional)</label>
+            <textarea class="form-control" id="note" name="note" rows="2" placeholder="Placement decision notes..."></textarea>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary btn-lg" type="submit">Create placement</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="d-grid gap-2 mt-3">
+      <a class="btn btn-outline-secondary" href="{{ url_for('organization_applications_view') }}">Back to applications</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

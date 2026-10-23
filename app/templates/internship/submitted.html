@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Application Submitted - Internship Platform{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-panel">
+    <a class="auth-back" href="{{ url_for('internship_postings_view') }}">← Browse postings</a>
+    <div class="brand-wordmark">Internship Platform</div>
+    <p class="auth-tagline">Application submitted</p>
+
+    <div class="alert alert-success mb-3" role="alert">
+      APPLICATION SUBMITTED — your application is now available for organization review.
+    </div>
+
+    {% if application %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Application details</h5>
+        <p class="card-text text-muted small">
+          Application ID: {{ application.application_id }} &nbsp;|&nbsp; Status: <strong>{{ application.status }}</strong>
+        </p>
+        {% if application.submitted_at %}
+        <p class="card-text text-muted small">Submitted at: {{ application.submitted_at }}</p>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="d-grid gap-2">
+      <a class="btn btn-primary" href="{{ url_for('student_profile_view') }}">My profile</a>
+      <a class="btn btn-outline-secondary" href="{{ url_for('internship_postings_view') }}">Browse more postings</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
