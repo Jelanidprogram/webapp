@@ -1,0 +1,26 @@
+{
+  "system": "Internship Platform",
+  "actors": [
+    {"name": "Student", "side": "left"},
+    {"name": "Organization", "side": "right"}
+  ],
+  "use_cases": [
+    {
+      "name": "Application Preparation",
+      "actors": ["Student"],
+      "extends": ["Registration Submission"]
+    },
+    {
+      "name": "Registration Submission",
+      "actors": ["Student", "Organization"]
+    },
+    {
+      "name": "Internship Placement",
+      "actors": ["Organization"]
+    },
+    {
+      "name": "Review Applications",
+      "extends": ["Internship Placement"]
+    }
+  ]
+}
